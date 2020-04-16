@@ -72,6 +72,9 @@ public class VrmRuntimeLoader : MonoBehaviour
             Transform PastVrm = ShadowObject.transform.Find("VRM");
             Destroy(PastVrm.gameObject);
             context.Root.transform.parent = ShadowObject.transform;
+            context.Root.transform.localPosition = Vector3.zero;
+            context.Root.transform.localRotation = Quaternion.identity;
+            //context.Root.transform=transform.
             Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
             Animator VrmObjectAnimator = context.Root.GetComponent<Animator>();
             ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;

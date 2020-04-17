@@ -26,7 +26,7 @@ public class ShadowCollisionSetting : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CoinScoreText.text = "SCORE" + CoinScore;
+        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar + "\n♡" + ObtainedHeart + "\n○" + ObtainedJumpItem;
         if (Input.GetKeyDown(KeyCode.Return))
         {
             this.transform.position = RespawnPoint;

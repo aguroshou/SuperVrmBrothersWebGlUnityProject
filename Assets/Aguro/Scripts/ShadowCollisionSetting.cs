@@ -10,7 +10,7 @@ public class ShadowCollisionSetting : MonoBehaviour
     public long ObtainedStar;
     public long ObtainedJumpItem;
     public long ObtainedHeart;
-    public Transform RespawnPoint;
+    public Vector3 RespawnPoint;
     public GameObject PastCheckPoint;
 
     // Start is called before the first frame update
@@ -20,7 +20,7 @@ public class ShadowCollisionSetting : MonoBehaviour
         ObtainedStar = 0;
         ObtainedJumpItem = 0;
         ObtainedHeart = 0;
-        RespawnPoint = this.transform;
+        RespawnPoint = this.transform.position;
     }
 
     // Update is called once per frame
@@ -29,7 +29,7 @@ public class ShadowCollisionSetting : MonoBehaviour
         CoinScoreText.text = "SCORE" + CoinScore;
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            this.transform.position = RespawnPoint.position;
+            this.transform.position = RespawnPoint;
         }
     }
 
@@ -68,7 +68,7 @@ public class ShadowCollisionSetting : MonoBehaviour
         }
         else if (collision.name.Contains("CheckPoint"))
         {
-            RespawnPoint = collision.transform;
+            RespawnPoint = collision.transform.position;
             if (PastCheckPoint != null)
             {
                 MeshRenderer PastCheckPointMesh = PastCheckPoint.GetComponent<MeshRenderer>();

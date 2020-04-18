@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ShadowCollisionSetting : MonoBehaviour
+public class GameSystem : MonoBehaviour
 {
     public Text CoinScoreText;
     public long CoinScore;
     public long ObtainedStar;
     public long ObtainedJumpItem;
     public long ObtainedHeart;
+    public long NeedStar;
+    public long RemainingHeart;
+    public long RemainingJump;
     public Vector3 RespawnPoint;
     public GameObject PastCheckPoint;
+    private MoveBehaviour MoveBehaviorScript;
 
     // Start is called before the first frame update
     void Start()
@@ -21,12 +25,13 @@ public class ShadowCollisionSetting : MonoBehaviour
         ObtainedJumpItem = 0;
         ObtainedHeart = 0;
         RespawnPoint = this.transform.position;
+        MoveBehaviorScript = this.GetComponent<MoveBehaviour>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar + "\n♡" + ObtainedHeart + "\n○" + ObtainedJumpItem;
+        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar +"/" + NeedStar + "\n♡" + RemainingHeart + "/" + ObtainedHeart + "\n◯" + MoveBehaviorScript.AirJumpRemaining+"/" + ObtainedJumpItem;
         if (Input.GetKeyDown(KeyCode.Return))
         {
             this.transform.position = RespawnPoint;

@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class GameSystem : MonoBehaviour
 {
     public Text CoinScoreText;
+    public Text ClearText;
+    public Text ResetText;
+    public long ResetNumberOfTimes;
     public long CoinScore;
     public long ObtainedStar;
     public long ObtainedJumpItem;
@@ -20,10 +23,12 @@ public class GameSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        ResetNumberOfTimes = 0;
         CoinScore = 0;
         ObtainedStar = 0;
         ObtainedJumpItem = 0;
-        ObtainedHeart = 0;
+        ObtainedHeart = 1;
+        RemainingHeart = 1;
         RespawnPoint = this.transform.position;
         MoveBehaviorScript = this.GetComponent<MoveBehaviour>();
     }
@@ -31,11 +36,18 @@ public class GameSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar +"/" + NeedStar + "\n♡" + RemainingHeart + "/" + ObtainedHeart + "\n◯" + MoveBehaviorScript.AirJumpRemaining+"/" + ObtainedJumpItem;
-        if (Input.GetKeyDown(KeyCode.Return))
+        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar + "/" + NeedStar + "\n♡" + RemainingHeart + "/" + ObtainedHeart + "\n◯" + MoveBehaviorScript.AirJumpRemaining + "/" + ObtainedJumpItem;
+        if (Input.GetKeyDown(KeyCode.Return) || RemainingHeart <= 0)
         {
             this.transform.position = RespawnPoint;
+            RemainingHeart = ObtainedHeart;
+            ResetNumberOfTimes++;
         }
+        if (ObtainedStar >= NeedStar)
+        {
+            ClearText.text = "STAGE CLEAR";
+        }
+        ResetText.text = "RESET" + ResetNumberOfTimes;
     }
 
     // 他のオブジェクトと衝突した時に呼び出される関数
@@ -69,10 +81,12 @@ public class GameSystem : MonoBehaviour
         else if (collision.name.Contains("Heart"))
         {
             ObtainedHeart++;
+            RemainingHeart++;
             Destroy(collision.gameObject);
         }
         else if (collision.name.Contains("CheckPoint"))
         {
+            RemainingHeart = ObtainedHeart;
             RespawnPoint = collision.transform.position;
             if (PastCheckPoint != null)
             {
@@ -82,6 +96,10 @@ public class GameSystem : MonoBehaviour
             PastCheckPoint = collision.gameObject;
             MeshRenderer TmpMesh = collision.GetComponent<MeshRenderer>();
             TmpMesh.material.color = Color.green;
+        }
+        else if (collision.name.Contains("Magma"))
+        {
+            RemainingHeart = 0;
         }
     }
 }

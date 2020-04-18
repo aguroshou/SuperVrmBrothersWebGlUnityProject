@@ -23,8 +23,6 @@ public class MoveBehaviour : GenericBehaviour
     private GameSystem GameSystemScript;
     private bool IsNewJumpStarting;
     private long PastObtainedJumpItem;//Detect changing GameSystemScript.ObtainedJumpItem.
-    public long aaaaa;
-    public long bbbbb;
 
     // Start is always called after any Awake functions.
     void Start()
@@ -134,12 +132,6 @@ public class MoveBehaviour : GenericBehaviour
                 AirJumpRemaining = GameSystemScript.ObtainedJumpItem;
                 behaviourManager.GetAnim.SetBool(jumpBool, false);
                 behaviourManager.UnlockTempBehaviour(this.behaviourCode);
-                bbbbb++;
-            }
-            else
-            {
-                aaaaa++;
-
             }
         }
     }

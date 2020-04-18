@@ -22,7 +22,9 @@ public class MoveBehaviour : GenericBehaviour
     public long AirJumpRemaining;
     private GameSystem GameSystemScript;
     private bool IsNewJumpStarting;
-
+    private long PastObtainedJumpItem;//Detect changing GameSystemScript.ObtainedJumpItem.
+    public long aaaaa;
+    public long bbbbb;
 
     // Start is always called after any Awake functions.
     void Start()
@@ -39,11 +41,18 @@ public class MoveBehaviour : GenericBehaviour
 
         GameSystemScript = this.GetComponent<GameSystem>();
         AirJumpRemaining = 0;
+        PastObtainedJumpItem = 0;
     }
 
     // Update is used to set features regardless the active behaviour.
     void Update()
     {
+        if (GameSystemScript.ObtainedJumpItem != PastObtainedJumpItem)
+        {
+            PastObtainedJumpItem = GameSystemScript.ObtainedJumpItem;
+            AirJumpRemaining++;
+        }
+
         // Get jump input.
         if ((!jump || AirJumpRemaining >= 1) && Input.GetButtonDown(jumpButton) && behaviourManager.IsCurrentBehaviour(this.behaviourCode) && !behaviourManager.IsOverriding())
         {
@@ -56,6 +65,12 @@ public class MoveBehaviour : GenericBehaviour
             {
                 AirJumpRemaining--;
             }
+        }
+
+        //Fall from cliff.
+        if ((behaviourManager.GetRigidBody.velocity.y < 0) && !behaviourManager.IsGrounded())
+        {
+            jump = true;
         }
     }
 
@@ -74,7 +89,7 @@ public class MoveBehaviour : GenericBehaviour
     {
         // Start a new jump.
         //if (jump && !behaviourManager.GetAnim.GetBool(jumpBool)) //&& behaviourManager.IsGrounded())
-        if(IsNewJumpStarting)
+        if (IsNewJumpStarting)
         {
             IsNewJumpStarting = false;
             // Set jump related parameters.
@@ -95,10 +110,12 @@ public class MoveBehaviour : GenericBehaviour
             }
         }
         // Is already jumping?
-        else if (behaviourManager.GetAnim.GetBool(jumpBool))
+        //else if (behaviourManager.GetAnim.GetBool(jumpBool))
         {
+
             // Keep forward movement while in the air.
-            if (!behaviourManager.IsGrounded() && !isColliding && behaviourManager.GetTempLockStatus())
+            //if (!behaviourManager.IsGrounded() && !isColliding && behaviourManager.GetTempLockStatus())
+            if (!behaviourManager.IsGrounded() && !isColliding)
             {
                 if (Input.GetButton(HorizontalButton) || Input.GetButton(VerticalButton))
                 {
@@ -117,6 +134,12 @@ public class MoveBehaviour : GenericBehaviour
                 AirJumpRemaining = GameSystemScript.ObtainedJumpItem;
                 behaviourManager.GetAnim.SetBool(jumpBool, false);
                 behaviourManager.UnlockTempBehaviour(this.behaviourCode);
+                bbbbb++;
+            }
+            else
+            {
+                aaaaa++;
+
             }
         }
     }

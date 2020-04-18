@@ -41,7 +41,6 @@ public class MoveBehaviour : GenericBehaviour
         AirJumpRemaining = 0;
         PastObtainedJumpItem = 0;
     }
-
     // Update is used to set features regardless the active behaviour.
     void Update()
     {
@@ -90,6 +89,7 @@ public class MoveBehaviour : GenericBehaviour
         if (IsNewJumpStarting)
         {
             IsNewJumpStarting = false;
+            GameSystemScript.JumpSound.PlayOneShot(GameSystemScript.JumpSound.clip);
             // Set jump related parameters.
             behaviourManager.LockTempBehaviour(this.behaviourCode);
             behaviourManager.GetAnim.SetBool(jumpBool, true);

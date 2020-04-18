@@ -20,18 +20,18 @@ public class GameSystem : MonoBehaviour
     public GameObject PastCheckPoint;
     private MoveBehaviour MoveBehaviorScript;
 
-    private AudioSource CheckPointSound;
-    private AudioSource CoinCopperSound;
-    private AudioSource CoinSilverSound;
-    private AudioSource CoinGoldSound;
-    private AudioSource DamageSound;
-    private AudioSource HeartOnly1Sound;
-    private AudioSource JumpItemSound;
-    private AudioSource JumpSound;
-    private AudioSource HeartItemSound;
-    private AudioSource PlayerDeadSound;
-    private AudioSource StageClearSound;
-    private AudioSource StarItemSound;
+    public AudioSource CheckPointSound;
+    public AudioSource CopperCoinSound;
+    public AudioSource SilverCoinSound;
+    public AudioSource GoldCoinSound;
+    public AudioSource DamageSound;
+    public AudioSource HeartOnly1Sound;
+    public AudioSource JumpItemSound;
+    public AudioSource JumpSound;
+    public AudioSource HeartItemSound;
+    public AudioSource PlayerDeadSound;
+    public AudioSource StageClearSound;
+    public AudioSource StarItemSound;
 
     // Start is called before the first frame update
     void Start()
@@ -44,19 +44,19 @@ public class GameSystem : MonoBehaviour
         RemainingHeart = 1;
         RespawnPoint = this.transform.position;
         MoveBehaviorScript = this.GetComponent<MoveBehaviour>();
-        AudioSource[] audioSources = GetComponents<AudioSource>();
-        CheckPointSound = audioSources[0];
-        CoinCopperSound = audioSources[1];
-        CoinSilverSound = audioSources[2];
-        CoinGoldSound = audioSources[3];
-        DamageSound = audioSources[4];
-        HeartOnly1Sound = audioSources[5];
-        JumpItemSound = audioSources[6];
-        JumpSound = audioSources[7];
-        HeartItemSound = audioSources[8];
-        PlayerDeadSound = audioSources[9];
-        StageClearSound = audioSources[10];
-        StarItemSound = audioSources[11];
+        //AudioSource[] audioSources = GetComponents<AudioSource>();
+        //CheckPointSound = audioSources[0];
+        //CopperCoinSound = audioSources[1];
+        //SilverCoinSound = audioSources[2];
+        //GoldCoinSound = audioSources[3];
+        //DamageSound = audioSources[4];
+        //HeartOnly1Sound = audioSources[5];
+        //JumpItemSound = audioSources[6];
+        //JumpSound = audioSources[7];
+        //HeartItemSound = audioSources[8];
+        //PlayerDeadSound = audioSources[9];
+        //StageClearSound = audioSources[10];
+        //StarItemSound = audioSources[11];
     }
 
     // Update is called once per frame
@@ -65,6 +65,7 @@ public class GameSystem : MonoBehaviour
         CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar + "/" + NeedStar + "\n♡" + RemainingHeart + "/" + ObtainedHeart + "\n◯" + MoveBehaviorScript.AirJumpRemaining + "/" + ObtainedJumpItem;
         if (Input.GetKeyDown(KeyCode.Return) || RemainingHeart <= 0)
         {
+            PlayerDeadSound.PlayOneShot(PlayerDeadSound.clip);
             this.transform.position = RespawnPoint;
             RemainingHeart = ObtainedHeart;
             ResetNumberOfTimes++;
@@ -81,19 +82,19 @@ public class GameSystem : MonoBehaviour
     {
         if (collision.name.Contains("GoldCoin"))
         {
-            CoinGoldSound.PlayOneShot(CoinGoldSound.clip);
+            GoldCoinSound.PlayOneShot(GoldCoinSound.clip);
             CoinScore += 100;
             Destroy(collision.gameObject);
         }
         else if (collision.name.Contains("SilverCoin"))
         {
-            CoinSilverSound.PlayOneShot(CoinSilverSound.clip);
+            SilverCoinSound.PlayOneShot(SilverCoinSound.clip);
             CoinScore += 10;
             Destroy(collision.gameObject);
         }
         else if (collision.name.Contains("CopperCoin"))
         {
-            CoinCopperSound.PlayOneShot(CoinCopperSound.clip);
+            CopperCoinSound.PlayOneShot(CopperCoinSound.clip);
             CoinScore++;
             Destroy(collision.gameObject);
         }
@@ -122,7 +123,6 @@ public class GameSystem : MonoBehaviour
         }
         else if (collision.name.Contains("CheckPoint"))
         {
-            RemainingHeart = ObtainedHeart;
             RespawnPoint = collision.transform.position;
             if (PastCheckPoint != null)
             {
@@ -133,6 +133,7 @@ public class GameSystem : MonoBehaviour
             {
                 CheckPointSound.PlayOneShot(CheckPointSound.clip);
                 PastCheckPoint = collision.gameObject;
+                RemainingHeart = ObtainedHeart;
             }
             MeshRenderer TmpMesh = collision.GetComponent<MeshRenderer>();
             TmpMesh.material.color = Color.green;

@@ -44,25 +44,12 @@ public class GameSystem : MonoBehaviour
         RemainingHeart = 1;
         RespawnPoint = this.transform.position;
         MoveBehaviorScript = this.GetComponent<MoveBehaviour>();
-        //AudioSource[] audioSources = GetComponents<AudioSource>();
-        //CheckPointSound = audioSources[0];
-        //CopperCoinSound = audioSources[1];
-        //SilverCoinSound = audioSources[2];
-        //GoldCoinSound = audioSources[3];
-        //DamageSound = audioSources[4];
-        //HeartOnly1Sound = audioSources[5];
-        //JumpItemSound = audioSources[6];
-        //JumpSound = audioSources[7];
-        //HeartItemSound = audioSources[8];
-        //PlayerDeadSound = audioSources[9];
-        //StageClearSound = audioSources[10];
-        //StarItemSound = audioSources[11];
     }
 
     // Update is called once per frame
     void Update()
     {
-        CoinScoreText.text = "SCORE" + CoinScore + "\n☆" + ObtainedStar + "/" + NeedStar + "\n♡" + RemainingHeart + "/" + ObtainedHeart + "\n◯" + MoveBehaviorScript.AirJumpRemaining + "/" + ObtainedJumpItem;
+        CoinScoreText.text = "SCORE:" + CoinScore + "\nSTAR:" + ObtainedStar + "/" + NeedStar + "\nHEART:" + RemainingHeart + "/" + ObtainedHeart + "\nJUMP:" + MoveBehaviorScript.AirJumpRemaining + "/" + ObtainedJumpItem;
         if (Input.GetKeyDown(KeyCode.Return) || RemainingHeart <= 0)
         {
             PlayerDeadSound.PlayOneShot(PlayerDeadSound.clip);
@@ -74,7 +61,7 @@ public class GameSystem : MonoBehaviour
         {
             ClearText.text = "STAGE CLEAR";
         }
-        ResetText.text = "RESET" + ResetNumberOfTimes;
+        ResetText.text = "RESET:" + ResetNumberOfTimes;
     }
 
     // 他のオブジェクトと衝突した時に呼び出される関数

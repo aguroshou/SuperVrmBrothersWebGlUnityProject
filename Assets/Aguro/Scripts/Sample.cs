@@ -7,39 +7,26 @@ using VRM;
 
 public class Sample : MonoBehaviour
 {
-    public GameObject MoveTestObject;
+    public GameObject VrmObject;
+    public GameObject LoadVrmObject;
     public GameObject ShadowObject;
     [DllImport("__Internal")]
     private static extern void FileImporterCaptureClick();
 
-    public void Update()
-    {
-        if (MoveTestObject!=null&& Input.GetKeyDown(KeyCode.N))
-        {
-            MoveTestObject.transform.Rotate(5.0f, 5.0f, 5.0f);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            //Transform PastVrm = ShadowObject.transform.Find("VRM");
-            //Destroy(PastVrm.gameObject);
-
-            //MoveTestObject.name = "VRM";
-            MoveTestObject.transform.parent = ShadowObject.transform;
-            MoveTestObject.transform.localPosition = Vector3.zero;
-            MoveTestObject.transform.localRotation = Quaternion.identity;
-            Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
-            Animator VrmObjectAnimator = MoveTestObject.GetComponent<Animator>();
-            ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
-
-        }
-    }
-
     public void OnButtonClicked()
     {
         #if UNITY_EDITOR
-            Debug.Log("WebGLビルドで試してください");
+            LoadFromFile();
+            //if (LoadVrmObject!=null)
+            //{
+            //    DestroyImmediate(VrmObject);
+            //}
         #elif UNITY_WEBGL
             FileImporterCaptureClick();
+            //if (LoadVrmObject!=null)
+            //{
+            //    DestroyImmediate(VrmObject);
+            //}
         #endif
     }
 
@@ -76,17 +63,48 @@ public class Sample : MonoBehaviour
             var model = context.Root;
             model.gameObject.name = meta.Title;
             context.ShowMeshes();
-
-            MoveTestObject = context.Root;
-            MoveTestObject.transform.parent = ShadowObject.transform;
-            MoveTestObject.transform.localPosition = Vector3.zero;
-            MoveTestObject.transform.localRotation = Quaternion.identity;
+            LoadVrmObject = context.Root;
+            LoadVrmObject.transform.parent = ShadowObject.transform;
+            LoadVrmObject.transform.localPosition = Vector3.zero;
+            LoadVrmObject.transform.localRotation = Quaternion.identity;
             Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
-            Animator VrmObjectAnimator = MoveTestObject.GetComponent<Animator>();
+            Animator VrmObjectAnimator = LoadVrmObject.GetComponent<Animator>();
             ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
         }
         catch (Exception e) {
             Debug.LogError(e);
         }
+    }
+    void LoadFromFile()
+    {
+        //VRMファイルのパスを指定します
+        //var path = Application.dataPath + "/Aguro/VrmModel/VroidMan.vrm";
+        //var path = Application.dataPath + "/Aguro/VrmModel/AliciaSolid.vrm";
+        //var path = Application.dataPath + "/Aguro/VrmModel/UnityChan(pants).vrm";
+        var path = Application.dataPath + "/Aguro/VrmModel/VroidMan.vrm";
+
+        //ファイルをByte配列に読み込みます
+        var bytes = System.IO.File.ReadAllBytes(path);
+
+        var context = new VRMImporterContext();
+
+        // GLB形式でJSONを取得しParseします
+        context.ParseGlb(bytes);
+
+        context.Load();
+        OnLoaded(context);
+    }
+    private void OnLoaded(VRMImporterContext context)
+    {
+        //メッシュを表示します
+        context.ShowMeshes();
+        //Destroy(VrmObject);
+        LoadVrmObject = context.Root;
+        LoadVrmObject.transform.parent = ShadowObject.transform;
+        LoadVrmObject.transform.localPosition = Vector3.zero;
+        LoadVrmObject.transform.localRotation = Quaternion.identity;
+        Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
+        Animator VrmObjectAnimator = LoadVrmObject.GetComponent<Animator>();
+        ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
     }
 }

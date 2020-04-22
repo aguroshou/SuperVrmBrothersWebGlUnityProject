@@ -7,38 +7,56 @@ using VRM;
 
 public class Sample : MonoBehaviour
 {
-    public GameObject MoveTestObject;
+    public GameObject VrmObject;
+    public GameObject LoadVrmObject;
     public GameObject ShadowObject;
     [DllImport("__Internal")]
     private static extern void FileImporterCaptureClick();
 
-    public void Update()
+    //public void Update()
+    //{
+    //    if (LoadVrmObject!=null&& VrmObject != null)
+    //    {
+    //        Destroy(VrmObject);
+    //    }
+    //}
+    void Update()
     {
-        if (MoveTestObject!=null&& Input.GetKeyDown(KeyCode.N))
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            MoveTestObject.transform.Rotate(5.0f, 5.0f, 5.0f);
+            if (VrmObject != null)
+            {
+                VrmObject.SetActive(false);
+            }
         }
-        if (Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.X))
         {
-            //Transform PastVrm = ShadowObject.transform.Find("VRM");
-            //Destroy(PastVrm.gameObject);
-
-            //MoveTestObject.name = "VRM";
-            MoveTestObject.transform.parent = ShadowObject.transform;
-            MoveTestObject.transform.localPosition = Vector3.zero;
-            MoveTestObject.transform.localRotation = Quaternion.identity;
-            Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
-            Animator VrmObjectAnimator = MoveTestObject.GetComponent<Animator>();
-            ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
-
+            if (VrmObject != null)
+            {
+                Destroy(VrmObject);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (VrmObject != null)
+            {
+                VrmObject.transform.position = Vector3.zero;
+            }
         }
     }
-
     public void OnButtonClicked()
     {
         #if UNITY_EDITOR
             Debug.Log("WebGLビルドで試してください");
         #elif UNITY_WEBGL
+            if(VrmObject!=null)
+            {
+                VrmObject.SetActive (false);
+            }
+            if(LoadVrmObject!=null)
+            {
+                Destroy(LoadVrmObject);
+            }
             FileImporterCaptureClick();
         #endif
     }
@@ -77,12 +95,12 @@ public class Sample : MonoBehaviour
             model.gameObject.name = meta.Title;
             context.ShowMeshes();
 
-            MoveTestObject = context.Root;
-            MoveTestObject.transform.parent = ShadowObject.transform;
-            MoveTestObject.transform.localPosition = Vector3.zero;
-            MoveTestObject.transform.localRotation = Quaternion.identity;
+            LoadVrmObject = context.Root;
+            LoadVrmObject.transform.parent = ShadowObject.transform;
+            LoadVrmObject.transform.localPosition = Vector3.zero;
+            LoadVrmObject.transform.localRotation = Quaternion.identity;
             Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
-            Animator VrmObjectAnimator = MoveTestObject.GetComponent<Animator>();
+            Animator VrmObjectAnimator = LoadVrmObject.GetComponent<Animator>();
             ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
         }
         catch (Exception e) {

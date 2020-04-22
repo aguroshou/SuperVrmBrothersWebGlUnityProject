@@ -10,9 +10,15 @@ public class Sample : MonoBehaviour
     public GameObject VrmObject;
     public GameObject LoadVrmObject;
     public GameObject ShadowObject;
+    public bool IsVrmLoaded;
+    public long VrmObjectDestroyCount;
     [DllImport("__Internal")]
     private static extern void FileImporterCaptureClick();
-
+    private void Start()
+    {
+        IsVrmLoaded = false;
+        VrmObjectDestroyCount = 0;
+    }
     //public void Update()
     //{
     //    if (LoadVrmObject!=null&& VrmObject != null)
@@ -22,43 +28,57 @@ public class Sample : MonoBehaviour
     //}
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Z))
-        {
-            if (VrmObject != null)
-            {
-                VrmObject.SetActive(false);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.X))
-        {
-            if (VrmObject != null)
-            {
-                Destroy(VrmObject);
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            if (VrmObject != null)
-            {
-                VrmObject.transform.position = Vector3.zero;
-            }
-        }
+        //if (IsVrmLoaded == true|| LoadVrmObject != null || Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    Destroy(VrmObject);
+        //}
+
+        //if ((VrmObject != null&&LoadVrmObject!=null)|| Input.GetKeyDown(KeyCode.Z))
+        //if ((IsVrmLoaded == true && VrmObjectDestroyCount == 100) || Input.GetKeyDown(KeyCode.Z))
+        //VrmObjectDestroyCount = (VrmObjectDestroyCount + 1) % 101;
+
+        //if (Input.GetKeyDown(KeyCode.Z))
+        //{
+        //    if (VrmObject != null)
+        //    {
+        //        VrmObject.SetActive(false);
+        //    }
+        //}
+        //if (Input.GetKeyDown(KeyCode.X))
+        //{
+        //    if (VrmObject != null)
+        //    {
+        //        Destroy(VrmObject);
+        //    }
+        //}
+        //if (Input.GetKeyDown(KeyCode.C))
+        //{
+        //    if (VrmObject != null)
+        //    {
+        //        VrmObject.transform.position = Vector3.zero;
+        //    }
+        //}
     }
+    public void OnButtonClickedDestroyVrmObject()
+    {
+        Destroy(VrmObject);
+    }
+
     public void OnButtonClicked()
     {
-        #if UNITY_EDITOR
-            Debug.Log("WebGLビルドで試してください");
-        #elif UNITY_WEBGL
-            if(VrmObject!=null)
-            {
-                VrmObject.SetActive (false);
-            }
+#if UNITY_EDITOR
+        Debug.Log("WebGLビルドで試してください");
+#elif UNITY_WEBGL
+            //if(VrmObject!=null)
+            //{
+            //    VrmObject.SetActive (false);
+            //}
             if(LoadVrmObject!=null)
             {
                 Destroy(LoadVrmObject);
             }
             FileImporterCaptureClick();
-        #endif
+#endif
     }
 
     public void FileSelected(string url)
@@ -86,7 +106,8 @@ public class Sample : MonoBehaviour
     public void LoadVRMFromBytes(Byte[] bytes)
     {
         var context = new VRMImporterContext();
-        try {
+        try
+        {
             context.ParseGlb(bytes);
             var meta = context.ReadMeta(true);
             context.Load();
@@ -102,8 +123,10 @@ public class Sample : MonoBehaviour
             Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
             Animator VrmObjectAnimator = LoadVrmObject.GetComponent<Animator>();
             ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
+            IsVrmLoaded = true;
         }
-        catch (Exception e) {
+        catch (Exception e)
+        {
             Debug.LogError(e);
         }
     }

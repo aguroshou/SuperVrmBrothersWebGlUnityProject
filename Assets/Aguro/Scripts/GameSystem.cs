@@ -5,20 +5,25 @@ using UnityEngine.UI;
 
 public class GameSystem : MonoBehaviour
 {
-    public Text CoinScoreText;
-    public Text ClearText;
-    public Text ResetText;
-    public long ResetNumberOfTimes;
-    public long CoinScore;
-    public long ObtainedStar;
-    public long ObtainedJumpItem;
-    public long ObtainedHeart;
-    public long NeedStar;
-    public long RemainingHeart;
-    public long RemainingJump;
-    public Vector3 RespawnPoint;
-    public GameObject PastCheckPoint;
     private MoveBehaviour MoveBehaviorScript;
+    [SerializeField] Text CoinScoreText;
+    [SerializeField] Text ClearText;
+    [SerializeField] Text ResetText;
+    [SerializeField] int ResetNumberOfTimes;
+    [SerializeField] int CoinScore;
+    [SerializeField] int ObtainedStar;
+    [SerializeField] int obtainedJumpItem;
+    public int ObtainedJumpItem
+    {
+        get { return this.obtainedJumpItem; }  //取得用
+        private set { this.obtainedJumpItem = value; } //値入力用
+    }
+    [SerializeField] int ObtainedHeart;
+    [SerializeField] int NeedStar;
+    [SerializeField] int RemainingHeart;
+    [SerializeField] int RemainingJump;
+    [SerializeField] Vector3 RespawnPoint;
+    [SerializeField] GameObject PastCheckPoint;
 
     public AudioSource CheckPointSound;
     public AudioSource CopperCoinSound;
@@ -36,6 +41,7 @@ public class GameSystem : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        NeedStar = 4;
         ResetNumberOfTimes = 0;
         CoinScore = 0;
         ObtainedStar = 0;

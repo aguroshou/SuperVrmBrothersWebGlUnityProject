@@ -14,24 +14,6 @@ public class Sample : MonoBehaviour
     public long VrmObjectDestroyCount;
     [DllImport("__Internal")]
     private static extern void FileImporterCaptureClick();
-<<<<<<< HEAD
-
-    public void OnButtonClicked()
-    {
-        #if UNITY_EDITOR
-            LoadFromFile();
-            //if (LoadVrmObject!=null)
-            //{
-            //    DestroyImmediate(VrmObject);
-            //}
-        #elif UNITY_WEBGL
-            FileImporterCaptureClick();
-            //if (LoadVrmObject!=null)
-            //{
-            //    DestroyImmediate(VrmObject);
-            //}
-        #endif
-=======
     private void Start()
     {
         IsVrmLoaded = false;
@@ -97,7 +79,6 @@ public class Sample : MonoBehaviour
             }
             FileImporterCaptureClick();
 #endif
->>>>>>> origin/FromWebGlLoadVrmCommitBranch
     }
 
     public void FileSelected(string url)
@@ -134,10 +115,7 @@ public class Sample : MonoBehaviour
             var model = context.Root;
             model.gameObject.name = meta.Title;
             context.ShowMeshes();
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/FromWebGlLoadVrmCommitBranch
             LoadVrmObject = context.Root;
             LoadVrmObject.transform.parent = ShadowObject.transform;
             LoadVrmObject.transform.localPosition = Vector3.zero;
@@ -151,37 +129,5 @@ public class Sample : MonoBehaviour
         {
             Debug.LogError(e);
         }
-    }
-    void LoadFromFile()
-    {
-        //VRMファイルのパスを指定します
-        //var path = Application.dataPath + "/Aguro/VrmModel/VroidMan.vrm";
-        //var path = Application.dataPath + "/Aguro/VrmModel/AliciaSolid.vrm";
-        //var path = Application.dataPath + "/Aguro/VrmModel/UnityChan(pants).vrm";
-        var path = Application.dataPath + "/Aguro/VrmModel/VroidMan.vrm";
-
-        //ファイルをByte配列に読み込みます
-        var bytes = System.IO.File.ReadAllBytes(path);
-
-        var context = new VRMImporterContext();
-
-        // GLB形式でJSONを取得しParseします
-        context.ParseGlb(bytes);
-
-        context.Load();
-        OnLoaded(context);
-    }
-    private void OnLoaded(VRMImporterContext context)
-    {
-        //メッシュを表示します
-        context.ShowMeshes();
-        //Destroy(VrmObject);
-        LoadVrmObject = context.Root;
-        LoadVrmObject.transform.parent = ShadowObject.transform;
-        LoadVrmObject.transform.localPosition = Vector3.zero;
-        LoadVrmObject.transform.localRotation = Quaternion.identity;
-        Animator ShadowObjectAnimator = ShadowObject.GetComponent<Animator>();
-        Animator VrmObjectAnimator = LoadVrmObject.GetComponent<Animator>();
-        ShadowObjectAnimator.avatar = VrmObjectAnimator.avatar;
     }
 }
